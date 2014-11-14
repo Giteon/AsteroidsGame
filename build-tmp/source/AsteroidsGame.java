@@ -1,3 +1,19 @@
+import processing.core.*; 
+import processing.data.*; 
+import processing.event.*; 
+import processing.opengl.*; 
+
+import java.util.HashMap; 
+import java.util.ArrayList; 
+import java.io.File; 
+import java.io.BufferedReader; 
+import java.io.PrintWriter; 
+import java.io.InputStream; 
+import java.io.OutputStream; 
+import java.io.IOException; 
+
+public class AsteroidsGame extends PApplet {
+
 SpaceShip gideon;
 Star [] kawaii;
 boolean upPressed = false;
@@ -46,11 +62,11 @@ if(rightPressed == true)
 }
 if(upPressed == true)
 {
-  gideon.accelerate(0.11);
+  gideon.accelerate(0.11f);
 }
 if(downPressed == true)
 {
-  gideon.accelerate(-0.11);
+  gideon.accelerate(-0.11f);
 }
 }
  public void keyPressed()
@@ -260,7 +276,7 @@ class Star
       sparkleY = 1;
     }
   }
-  void show()
+  public void show()
   {
 
     noStroke();
@@ -276,14 +292,14 @@ class Star
     ellipse(myX, myY, sparkleX, sparkleY);
     ellipse(myX, myY, sparkleY, sparkleX);
   }
-  void lookDown()
+  public void lookDown()
   {
       isMoving = true;
       sparkleX = sparkleX + (int)(Math.random()*8-4);
       sparkleY = sparkleY + (int)(Math.random()*8-4);
       if (sparkleX == sparkleY)
       {
-        if (Math.random()>0.5)
+        if (Math.random()>0.5f)
         {
           sparkleX = 4;
           sparkleY = 1;
@@ -316,13 +332,13 @@ class Star
     // void lookDown() checks if y is between the top and bottom of the screen, and the position just below (x,y) is not black. 
     //If so, set isMoving to false; otherwise set isMoving to true
   }
-  void erase()
+  public void erase()
   {
     fill(0);
     stroke(0);
     ellipse(myX, myY, sparkleX+(sparkleX/2), sparkleY+(sparkleY/2));
   }
-  void move()
+  public void move()
   {
     if (isMoving)
     {
@@ -331,7 +347,7 @@ class Star
     }
     // void move() which checks if the snow flake isMoving. If it is, increase y by one
   }
-  void wrap()
+  public void wrap()
   {
     if (myY > height)
     {
@@ -356,5 +372,14 @@ class Star
      
     // void wrap() which checks if the y coordinate is off the bottom of the screen. 
     //If it is, set y to 0 and generate a new random x coordinate
+  }
+}
+  static public void main(String[] passedArgs) {
+    String[] appletArgs = new String[] { "AsteroidsGame" };
+    if (passedArgs != null) {
+      PApplet.main(concat(appletArgs, passedArgs));
+    } else {
+      PApplet.main(appletArgs);
+    }
   }
 }
