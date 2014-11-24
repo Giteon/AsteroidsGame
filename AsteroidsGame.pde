@@ -1,17 +1,24 @@
+int distanceTo = 0;
+boolean canRemove = true;
 SpaceShip gideon;
 Star [] kawaii;
+ArrayList <Asteroid> disciples;
 boolean upPressed = false;
 boolean downPressed = false;
 boolean leftPressed = false;
 boolean rightPressed = false;
 public void setup() 
 {
-size(1200, 800);
-background(0);
-gideon = new SpaceShip();
-kawaii = new Star[100];
+  size(1200, 800);
+  background(0);
+  gideon = new SpaceShip();
+  kawaii = new Star[100];
+disciples = new ArrayList <Asteroid>();
+ for (int d=0; d<5; d++)
+  {
 
-
+     disciples.add(new Asteroid());
+  }
 
   for (int i=0; i<kawaii.length; i++)
   {
@@ -21,21 +28,36 @@ kawaii = new Star[100];
 }
 public void draw() 
 {
-  fill(0,0,0,50);
+  fill(0,0,0,60);
   rect(0,0,width,height);
-// background(0);
 gideon.show();
 gideon.move();
-gideon.hyperspace();
+
+for (int i=0; i<disciples.size(); i++) 
+{
+  disciples.get(i).show();
+  disciples.get(i).move();
+}
+
+for(int z = 0; z < disciples.size(); z++)
+{
+   distanceTo = (int)(dist(gideon.getX(),gideon.getY(),
+    disciples.get(z).getX(),disciples.get(z).getY()));
+
+if(distanceTo <  20)
+{
+  disciples.remove(z);
+}
+}
 for (int g=0; g<kawaii.length; g++) 
 
-  {
-    kawaii[g].erase();
-    kawaii[g].lookDown();
-    kawaii[g].move();
-    kawaii[g].wrap();
-    kawaii[g].show();
-  }
+{
+  kawaii[g].erase();
+  kawaii[g].lookDown();
+  kawaii[g].move();
+  kawaii[g].wrap();
+  kawaii[g].show();
+}
 if(leftPressed == true)
 {
   gideon.rotate(-5);
@@ -53,56 +75,110 @@ if(downPressed == true)
   gideon.accelerate(-0.11);
 }
 }
- public void keyPressed()
+public void keyPressed()
 {
-if(keyCode == LEFT)
-{
-  leftPressed = true;
-}
-if(keyCode == RIGHT)
-{
-rightPressed = true;
-}
-if(keyCode == UP)
-{
-upPressed = true;
-}
-if(keyCode == DOWN)
-{
-downPressed = true;
-}
+  if(keyCode == LEFT)
+  {
+    leftPressed = true;
+  }
+  if(keyCode == RIGHT)
+  {
+    rightPressed = true;
+  }
+  if(keyCode == UP)
+  {
+    upPressed = true;
+  }
+  if(keyCode == DOWN)
+  {
+    downPressed = true;
+  }
 }
 public void keyReleased()
 {
   if (key == ' ')
-    {
-  
-  gideon.setX((int)(Math.random()*1200));
-  gideon.setY((int)(Math.random()*800));
-  gideon.setDirectionX(0);
-  gideon.setDirectionY(0);
+  {
+
+    gideon.setX((int)(Math.random()*1200));
+    gideon.setY((int)(Math.random()*800));
+    gideon.setDirectionX(0);
+    gideon.setDirectionY(0);
+  }
+  if(keyCode == LEFT)
+  {
+    leftPressed = false;
+  }
+  if(keyCode == RIGHT)
+  {
+    rightPressed = false;
+  }
+  if(keyCode == UP)
+  {
+    upPressed = false;
+  }
+  if(keyCode == DOWN)
+  {
+    downPressed = false;
+  }
+
+
+
 }
-if(keyCode == LEFT)
+
+class Asteroid extends Floater
+
 {
-  leftPressed = false;
+
+ private int rotSpeed;
+
+  Asteroid()
+  {
+    corners = 6;
+    xCorners = new int[corners];
+    yCorners = new int[corners];
+    xCorners[0] = -((int)(Math.random()+2*13));
+    yCorners[0] = -((int)(Math.random()+2*10));
+    xCorners[1] = ((int)(Math.random()+2*9));
+    yCorners[1] = -((int)(Math.random()+2*10));
+    xCorners[2] = ((int)(Math.random()+2*15));
+    yCorners[2] = 0;
+    xCorners[3] = ((int)(Math.random()+2*8));
+    yCorners[3] = ((int)(Math.random()+2*12));
+    xCorners[4] = -((int)(Math.random()+2*13));
+    yCorners[4] = ((int)(Math.random()+2*10));
+    xCorners[5] = -((int)(Math.random()+2*7));
+    yCorners[5] = 0;
+    rotSpeed = (int)(Math.random()-1*2);
+
+    myColor = color(255,255,255);   
+    myCenterX = Math.random()*width;
+     myCenterY = Math.random()*height; //holds center coordinates   
+     myDirectionX = ((int)(Math.random()*10+1));
+     myDirectionY = ((int)(Math.random()*10+1)); //holds x and y coordinates of the vector for direction of travel   
+    myPointDirection = Math.random()*360; //holds current direction the ship is pointing in degrees    
+  }
+public void setX(int x){myCenterX = x;}  
+  public int getX() {return (int)myCenterX;}
+  public void setY(int y){myCenterY = y;}
+  public int getY(){return (int)myCenterY;} 
+  public void setDirectionX(double x){myDirectionX = x;}
+  public double getDirectionX() {return myDirectionX;}
+  public void setDirectionY(double y){myDirectionY = y;}
+  public double getDirectionY() {return myDirectionY;}
+  public void setPointDirection(int degrees){myPointDirection = degrees;}  
+  public double getPointDirection(){return myPointDirection;} 
+
+void move()
+{ 
+rotate(rotSpeed);
+   super.move();
 }
-if(keyCode == RIGHT)
-{
-rightPressed = false;
 }
-if(keyCode == UP)
-{
-upPressed = false;
-}
-if(keyCode == DOWN)
-{
-downPressed = false;
-}
-}
+
 class SpaceShip extends Floater 
 {   
-SpaceShip()
-{
+  SpaceShip()
+  {
     corners = 4;
     xCorners = new int[corners]; 
     yCorners = new int[corners]; 
@@ -117,23 +193,21 @@ SpaceShip()
     myColor = color(255,255,255);   
     myCenterX = width/2;
      myCenterY = height/2; //holds center coordinates   
-    myDirectionX = 0;
+     myDirectionX = 0;
      myDirectionY = 0; //holds x and y coordinates of the vector for direction of travel   
     myPointDirection = 270; //holds current direction the ship is pointing in degrees    
-}
-public void setX(int x){myCenterX = x;}  
-public int getX() {return (int)myCenterX;}
-public void setY(int y){myCenterY = y;}
-public int getY(){return (int)myCenterY;} 
-public void setDirectionX(double x){myDirectionX = x;}
-public double getDirectionX() {return myDirectionX;}
-public void setDirectionY(double y){myDirectionY = y;}
-public double getDirectionY() {return myDirectionY;}
-public void setPointDirection(int degrees){myPointDirection = degrees;}  
- public double getPointDirection(){return myPointDirection;} 
+  }
+  public void setX(int x){myCenterX = x;}  
+  public int getX() {return (int)myCenterX;}
+  public void setY(int y){myCenterY = y;}
+  public int getY(){return (int)myCenterY;} 
+  public void setDirectionX(double x){myDirectionX = x;}
+  public double getDirectionX() {return myDirectionX;}
+  public void setDirectionY(double y){myDirectionY = y;}
+  public double getDirectionY() {return myDirectionY;}
+  public void setPointDirection(int degrees){myPointDirection = degrees;}  
+  public double getPointDirection(){return myPointDirection;} 
   // return null;
-
-
 
 }
 
@@ -215,13 +289,7 @@ abstract class Floater //Do NOT modify the Floater class! Make changes in the Sp
     }   
     endShape(CLOSE);  
   }   
-public void hyperspace()
-{
-  // if(keyReleased == true)
-  // {
-    
-// }
-}
+  
 }
 
 class Star    
@@ -278,40 +346,40 @@ class Star
   }
   void lookDown()
   {
-      isMoving = true;
-      sparkleX = sparkleX + (int)(Math.random()*8-4);
-      sparkleY = sparkleY + (int)(Math.random()*8-4);
-      if (sparkleX == sparkleY)
+    isMoving = true;
+    sparkleX = sparkleX + (int)(Math.random()*8-4);
+    sparkleY = sparkleY + (int)(Math.random()*8-4);
+    if (sparkleX == sparkleY)
+    {
+      if (Math.random()>0.5)
       {
-        if (Math.random()>0.5)
-        {
-          sparkleX = 4;
-          sparkleY = 1;
-        }
-        else 
-        {
-          sparkleX = 1;
-          sparkleY = 4;
-        }
-      }
-      if (sparkleX > 5)
-      {
-        sparkleY = 1;
-        sparkleX = 5;
-      }
-      if (sparkleX < 1)
-      {
-        sparkleX = 1;
-      }
-      if (sparkleY > 5)
-      {
-        sparkleX = 1;
-        sparkleY = 5;
-      }
-      if (sparkleY < 1)
-      {
+        sparkleX = 4;
         sparkleY = 1;
       }
+      else 
+      {
+        sparkleX = 1;
+        sparkleY = 4;
+      }
+    }
+    if (sparkleX > 5)
+    {
+      sparkleY = 1;
+      sparkleX = 5;
+    }
+    if (sparkleX < 1)
+    {
+      sparkleX = 1;
+    }
+    if (sparkleY > 5)
+    {
+      sparkleX = 1;
+      sparkleY = 5;
+    }
+    if (sparkleY < 1)
+    {
+      sparkleY = 1;
+    }
     // }
     // void lookDown() checks if y is between the top and bottom of the screen, and the position just below (x,y) is not black. 
     //If so, set isMoving to false; otherwise set isMoving to true
@@ -333,27 +401,27 @@ class Star
   }
   void wrap()
   {
-    if (myY > height)
+    if (myY >= height)
     {
       myX = (int)(Math.random()*1200);
       myY = (int)(Math.random()*200);
     }
-    if (myX > width)
+    if (myX >= width)
     {
       myX = (int)(Math.random()*200);
       myY = (int)(Math.random()*800);
     }
-   if (myY < 0)
+    if (myY <= 0)
     {
       myX = (int)(Math.random()*1200);
       myY = (int)(Math.random()*200+600);
     }
-    if (myX < 0)
+    if (myX <= 0)
     {
       myX = (int)(Math.random()*200+1000);
       myY = (int)(Math.random()*800);
     }
-     
+
     // void wrap() which checks if the y coordinate is off the bottom of the screen. 
     //If it is, set y to 0 and generate a new random x coordinate
   }
