@@ -14,7 +14,7 @@ public void setup()
   gideon = new SpaceShip();
   kawaii = new Star[100];
 disciples = new ArrayList <Asteroid>();
- for (int d=0; d<5; d++)
+ for (int d=0; d<10; d++)
   {
 
      disciples.add(new Asteroid());
@@ -28,7 +28,7 @@ disciples = new ArrayList <Asteroid>();
 }
 public void draw() 
 {
-  fill(0,0,0,60);
+  fill(0,0,0,40);
   rect(0,0,width,height);
 gideon.show();
 gideon.move();
@@ -101,8 +101,8 @@ public void keyReleased()
 
     gideon.setX((int)(Math.random()*1200));
     gideon.setY((int)(Math.random()*800));
-    gideon.setDirectionX(0);
-    gideon.setDirectionY(0);
+    // gideon.setDirectionX(2);
+    // gideon.setDirectionY(2);
   }
   if(keyCode == LEFT)
   {
@@ -133,28 +133,32 @@ class Asteroid extends Floater
 
   Asteroid()
   {
-    corners = 6;
+    corners = 8;
     xCorners = new int[corners];
     yCorners = new int[corners];
-    xCorners[0] = -((int)(Math.random()+2*13));
-    yCorners[0] = -((int)(Math.random()+2*10));
-    xCorners[1] = ((int)(Math.random()+2*9));
-    yCorners[1] = -((int)(Math.random()+2*10));
-    xCorners[2] = ((int)(Math.random()+2*15));
-    yCorners[2] = 0;
-    xCorners[3] = ((int)(Math.random()+2*8));
-    yCorners[3] = ((int)(Math.random()+2*12));
-    xCorners[4] = -((int)(Math.random()+2*13));
-    yCorners[4] = ((int)(Math.random()+2*10));
-    xCorners[5] = -((int)(Math.random()+2*7));
-    yCorners[5] = 0;
-    rotSpeed = (int)(Math.random()-1*2);
-
+    int z=0;
+    for(double theta = 0; theta < Math.PI *2; theta = theta + Math.PI/4)
+    {
+      double r = Math.random()*30+10;
+      xCorners[z] = (int)(r*Math.cos(theta));
+      yCorners[z] = (int)(r*Math.sin(theta));
+      z++;
+    }
+    rotSpeed = (int)(Math.random()*5)-2;
     myColor = color(255,255,255);   
     myCenterX = Math.random()*width;
      myCenterY = Math.random()*height; //holds center coordinates   
-     myDirectionX = ((int)(Math.random()*10+1));
-     myDirectionY = ((int)(Math.random()*10+1)); //holds x and y coordinates of the vector for direction of travel   
+     myDirectionX = ((int)(Math.random()*20-10));
+     myDirectionY = ((int)(Math.random()*20-10)); 
+if(myDirectionX < 3 || 0-myDirectionX <3)
+{
+  myDirectionX = ((int)(Math.random()*20-10));
+}
+if(myDirectionY < 3 || 0-myDirectionY <3)
+{
+  myDirectionY = ((int)(Math.random()*20-10));
+}
+     //holds x and y coordinates of the vector for direction of travel   
     myPointDirection = Math.random()*360; //holds current direction the ship is pointing in degrees    
   }
 public void setX(int x){myCenterX = x;}  
@@ -274,7 +278,8 @@ abstract class Floater //Do NOT modify the Floater class! Make changes in the Sp
   }   
   public void show ()  //Draws the floater at the current position  
   {             
-    fill(myColor);   
+    fill(myColor); 
+    noFill();  
     stroke(myColor);    
     //convert degrees to radians for sin and cos         
     double dRadians = myPointDirection*(Math.PI/180);                 
