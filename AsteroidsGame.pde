@@ -66,6 +66,8 @@ public void draw()
     for (int g = 0; g < 1; g++)
     {
       text("GAME OVER. You reached level " + level, width/2, height/2);
+       text("Refresh the page to try again, width/2, height/2+150);
+      level = 0;
     }
   }
   gideon.show();
