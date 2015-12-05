@@ -1,4 +1,5 @@
-int lives = 650;
+int level = 1;
+int lives = 150;
 int livesDist = 10;
 int distanceToMissle = 0;
 int distanceToShip = 0;
@@ -17,12 +18,12 @@ public void setup()
   background(0);
   gideon = new SpaceShip();
   manyStars = new Star[100];
-manyAsteroids = new ArrayList <Asteroid>();
-manyMissles = new ArrayList <Missle>();
- for (int d=0; d<5; d++)
+  manyAsteroids = new ArrayList <Asteroid>();
+  manyMissles = new ArrayList <Missle>();
+  for (int d=0; d<5; d++)
   {
 
-     manyAsteroids.add(new Asteroid());
+    manyAsteroids.add(new Asteroid());
   }
 
   for (int i=0; i<manyStars.length; i++)
@@ -33,137 +34,150 @@ manyMissles = new ArrayList <Missle>();
 }
 public void draw() 
 {
-  fill(0,0,0,40);
-  rect(0,0,width,height);
 
-for (int l = 40; l < lives; l+=40)
-{
-  noFill();
-  stroke(255);
-  ellipse(l,30,25,25);
-  l++;
-}
-//game over
-if(lives<=0)
-{
-    textSize(100);
-  textAlign(CENTER);
-  fill(255);
-  for (int g = 0; g < 1; g++)
+  if (manyAsteroids.size()==0)
   {
-  text("GAME OVER",width/2-200,height/2);
-}
-}
-gideon.show();
-gideon.move();
-
-for (int i=0; i<manyAsteroids.size(); i++) 
-{
-  manyAsteroids.get(i).show();
-  manyAsteroids.get(i).move();
-}
-for (int k=0; k<manyMissles.size(); k++) 
-{
-  manyMissles.get(k).show();
-  manyMissles.get(k).move();
-}
-//checks if missle hits an asteroid
-for(int z = 0; z < manyAsteroids.size(); z++)
-{
-  for(int y = 0; y < manyMissles.size();y++)
-  {
-   distanceToMissle
-   = (int)(dist(manyMissles.get(y).getX(),manyMissles.get(y).getY(),
-    manyAsteroids.get(z).getX(),manyAsteroids.get(z).getY()));
-
-if(distanceToMissle <  manyAsteroids.get(z).getSize())
-{
-  Asteroid old = manyAsteroids.get(z);
-  if(old.getSize() > 18) //how big the origional asteroid has to be to determine whether it will split or not
-  {
-    manyAsteroids.add(new Asteroid(old));
-    manyAsteroids.add(new Asteroid(old)); 
+    for (int d=0; d< (5+level); d++)
+    {
+      manyAsteroids.add(new Asteroid());
+    }
+    textSize(200);
+    level +=1;
+    text(level, width/2, height/2);
   }
-  manyMissles.remove(y);
-  manyAsteroids.remove(z);
-  numMissles--;
-  break;
-}
-}
-}
-//
-//checks if the ship hits an asteroid
-for(int z = 0; z < manyAsteroids.size(); z++)
-{
-   distanceToShip
-   = (int)(dist(gideon.getX(),gideon.getY(),
-    manyAsteroids.get(z).getX(),manyAsteroids.get(z).getY()));
+  fill(0, 0, 0, 40);
+  rect(0, 0, width, height);
+  textSize(30);
+  fill(255);
+  text(level, width-50, 50);
+  for (int l = 40; l < lives; l+=40)
+  {
+    noFill();
+    stroke(255);
+    ellipse(l, 30, 25, 25);
+    l++;
+  }
+  //game over
+  if (lives<=0)
+  {
+    textSize(50);
+    textAlign(CENTER);
+    fill(255);
+    for (int g = 0; g < 1; g++)
+    {
+      text("GAME OVER. You reached level " + level, width/2, height/2);
+    }
+  }
+  gideon.show();
+  gideon.move();
 
-if(distanceToShip <  manyAsteroids.get(z).getSize())
-{
-  //asteroid will be destroyed, but won't split
-    gideon.setX(width/2);
-     gideon.setY(height/2); 
-     gideon.setDirectionX(0); 
-     gideon.setDirectionY(0); 
-    gideon.setPointDirection(270); 
-    lives -= 50;
-  manyAsteroids.remove(z);
-  break;
-}
-}
-//
-for (int g=0; g<manyStars.length; g++) 
+  for (int i=0; i<manyAsteroids.size (); i++) 
+  {
+    manyAsteroids.get(i).show();
+    manyAsteroids.get(i).move();
+  }
+  for (int k=0; k<manyMissles.size (); k++) 
+  {
+    manyMissles.get(k).show();
+    manyMissles.get(k).move();
+  }
+  //checks if missle hits an asteroid
+  for (int z = 0; z < manyAsteroids.size (); z++)
+  {
+    for (int y = 0; y < manyMissles.size (); y++)
+    {
+      distanceToMissle
+        = (int)(dist(manyMissles.get(y).getX(), manyMissles.get(y).getY(), 
+      manyAsteroids.get(z).getX(), manyAsteroids.get(z).getY()));
 
-{
-  manyStars[g].erase();
-  manyStars[g].lookDown();
-  manyStars[g].move();
-  manyStars[g].wrap();
-  manyStars[g].show();
-}
+      if (distanceToMissle <  manyAsteroids.get(z).getSize())
+      {
+        Asteroid old = manyAsteroids.get(z);
+        if (old.getSize() > 20) //how big the original asteroid has to be to determine whether it will split or not
+        {
+          manyAsteroids.add(new Asteroid(old));
+          manyAsteroids.add(new Asteroid(old));
+        }
+        manyMissles.remove(y);
+        manyAsteroids.remove(z);
+        numMissles--;
+        break;
+      }
+    }
+  }
+  //
+  //checks if the ship hits an asteroid
+  for (int z = 0; z < manyAsteroids.size (); z++)
+  {
+    distanceToShip
+      = (int)(dist(gideon.getX(), gideon.getY(), 
+    manyAsteroids.get(z).getX(), manyAsteroids.get(z).getY()));
 
-for(int o = 0; o < manyMissles.size();o++)
-{
-if(manyMissles.get(o).getX()> 1200 || manyMissles.get(o).getY()> 1200 || manyMissles.get(o).getX()<0 || manyMissles.get(o).getY()<0)
-{
- manyMissles.remove(o);
- numMissles--;
-}
-}
+    if (distanceToShip <  manyAsteroids.get(z).getSize())
+    {
+      //asteroid will be destroyed, but won't split
+      gideon.setX(width/2);
+      gideon.setY(height/2); 
+      gideon.setDirectionX(0); 
+      gideon.setDirectionY(0); 
+      gideon.setPointDirection(270); 
+      lives -= 50;
+      manyAsteroids.remove(z);
+      break;
+    }
+  }
+  //
+  for (int g=0; g<manyStars.length; g++) 
 
-if(leftPressed == true)
-{
-  gideon.rotate(-5);
-}
-if(rightPressed == true)
-{
-  gideon.rotate(5);
-}
-if(upPressed == true)
-{
-  gideon.accelerate(0.11);
-}
-if(downPressed == true)
-{
-  gideon.accelerate(-0.11);
-}
+  {
+    manyStars[g].erase();
+    manyStars[g].lookDown();
+    manyStars[g].move();
+    manyStars[g].wrap();
+    manyStars[g].show();
+  }
+
+  for (int o = 0; o < manyMissles.size (); o++)
+  {
+    if (manyMissles.get(o).getX()> 1200 || manyMissles.get(o).getY()> 1200 || manyMissles.get(o).getX()<0 || manyMissles.get(o).getY()<0)
+    {
+      manyMissles.remove(o);
+      numMissles--;
+    }
+  }
+
+  if (leftPressed == true)
+  {
+    gideon.rotate(-5);
+  }
+  if (rightPressed == true)
+  {
+    gideon.rotate(5);
+  }
+  if (upPressed == true)
+  {
+    gideon.accelerate(0.26);
+  }
+  if (downPressed == true)
+  {
+    gideon.accelerate(-0.26);
+  }
 }
 public void keyPressed()
 {
-  if(keyCode == LEFT)
+  if (keyCode == LEFT)
   {
     leftPressed = true;
   }
-  if(keyCode == RIGHT)
+  if (keyCode == RIGHT)
   {
     rightPressed = true;
   }
-  if(keyCode == UP)
+  if (keyCode == UP)
   {
     upPressed = true;
   }
-  if(keyCode == DOWN)
+  if (keyCode == DOWN)
   {
     downPressed = true;
   }
@@ -171,19 +185,19 @@ public void keyPressed()
 public void keyReleased()
 {
 
-   if(keyCode == LEFT)
+  if (keyCode == LEFT)
   {
     leftPressed = false;
   }
-  if(keyCode == RIGHT)
+  if (keyCode == RIGHT)
   {
     rightPressed = false;
   }
-  if(keyCode == UP)
+  if (keyCode == UP)
   {
     upPressed = false;
   }
-  if(keyCode == DOWN)
+  if (keyCode == DOWN)
   {
     downPressed = false;
   }
@@ -196,25 +210,25 @@ public void keyReleased()
     // gideon.setDirectionX(2);
     // gideon.setDirectionY(2);
   }
- 
- if (key == ' ')
+
+  if (key == ' ')
   {
     //make a missle
-  if (numMissles < 5)
-  {
+    if (numMissles < 10+(level*2))
+    {
 
-    
-    manyMissles.add(new Missle(gideon));
-    numMissles++;
+
+      manyMissles.add(new Missle(gideon));
+      numMissles++;
+    }
   }
-}
 }
 
 class Asteroid extends Floater
 
 {
- private int rotSpeed;
- private int asteroidSize;
+  private int rotSpeed;
+  private int asteroidSize;
 
   Asteroid()
   {
@@ -223,7 +237,7 @@ class Asteroid extends Floater
     xCorners = new int[corners];
     yCorners = new int[corners];
     int z=0;
-    for(double theta = 0; theta < Math.PI *2; theta = theta + Math.PI/4)
+    for (double theta = 0; theta < Math.PI *2; theta = theta + Math.PI/4)
     {
       double r = Math.random()*asteroidSize+((int)(asteroidSize/3));
       xCorners[z] = (int)(r*Math.cos(theta));
@@ -231,75 +245,100 @@ class Asteroid extends Floater
       z++;
     }
     rotSpeed = (int)(Math.random()*5)-2;
-    myColor = color(255,255,255);   
+    myColor = color(255, 255, 255);   
     myCenterX = Math.random()*width;
-     myCenterY = Math.random()*height; //holds center coordinates   
-     myDirectionX = ((int)(Math.random()*20-10));
-     myDirectionY = ((int)(Math.random()*20-10)); 
-if(myDirectionX < 3 || 0-myDirectionX <3)
-{
-  myDirectionX = ((int)(Math.random()*20-10));
-}
-if(myDirectionY < 3 || 0-myDirectionY <3)
-{
-  myDirectionY = ((int)(Math.random()*20-10));
-}
-     //holds x and y coordinates of the vector for direction of travel   
-    myPointDirection = Math.random()*360; //holds current direction the ship is pointing in degrees    
+    myCenterY = Math.random()*height; //holds center coordinates   
+    myDirectionX = ((int)(Math.random()*20-10));
+    myDirectionY = ((int)(Math.random()*20-10)); 
+    if (myDirectionX < 3 || 0-myDirectionX <3)
+    {
+      myDirectionX = ((int)(Math.random()*20-10));
+    }
+    if (myDirectionY < 3 || 0-myDirectionY <3)
+    {
+      myDirectionY = ((int)(Math.random()*20-10));
+    }
+    //holds x and y coordinates of the vector for direction of travel   
+    myPointDirection = Math.random()*360; //holds current direction the ship is pointing in degrees
   }
 
-   public Asteroid(Asteroid old)
+  public Asteroid(Asteroid old)
   {
     asteroidSize = (int)(old.getSize()/1.2);
     corners = 8;
     xCorners = new int[corners];
     yCorners = new int[corners];
     int z=0;
-    for(double theta = 0; theta < Math.PI *2; theta = theta + Math.PI/4)
+    for (double theta = 0; theta < Math.PI *2; theta = theta + Math.PI/4)
     {
-      double r = Math.random()*asteroidSize+((int)(asteroidSize/3));;
+      double r = Math.random()*asteroidSize+((int)(asteroidSize/3));
+      ;
       xCorners[z] = (int)(r*Math.cos(theta));
       yCorners[z] = (int)(r*Math.sin(theta));
       z++;
     }
     rotSpeed = (int)(Math.random()*5)-2;
-    myColor = color(255,255,255);   
+    myColor = color(255, 255, 255);   
     //
     myCenterX = old.getX();
-     myCenterY = old.getY();
-     //  
-     myDirectionX = ((int)(Math.random()*20-10));
-     myDirectionY = ((int)(Math.random()*20-10)); 
-if(myDirectionX < 3 || 0-myDirectionX <3)
-{
-  myDirectionX = ((int)(Math.random()*20-10));
-}
-if(myDirectionY < 3 || 0-myDirectionY <3)
-{
-  myDirectionY = ((int)(Math.random()*20-10));
-}
-     //holds x and y coordinates of the vector for direction of travel   
-    myPointDirection = Math.random()*360; //holds current direction the ship is pointing in degrees    
+    myCenterY = old.getY();
+    //  
+    myDirectionX = ((int)(Math.random()*20-10));
+    myDirectionY = ((int)(Math.random()*20-10)); 
+    if (myDirectionX < 3 || 0-myDirectionX <3)
+    {
+      myDirectionX = ((int)(Math.random()*20-10));
+    }
+    if (myDirectionY < 3 || 0-myDirectionY <3)
+    {
+      myDirectionY = ((int)(Math.random()*20-10));
+    }
+    //holds x and y coordinates of the vector for direction of travel   
+    myPointDirection = Math.random()*360; //holds current direction the ship is pointing in degrees
   }
-public void setX(int x){myCenterX = x;}  
-  public int getX() {return (int)myCenterX;}
-  public void setY(int y){myCenterY = y;}
-  public int getY(){return (int)myCenterY;} 
-  public void setDirectionX(double x){myDirectionX = x;}
-  public double getDirectionX() {return myDirectionX;}
-  public void setDirectionY(double y){myDirectionY = y;}
-  public double getDirectionY() {return myDirectionY;}
-  public void setPointDirection(int degrees){myPointDirection = degrees;}  
-  public double getPointDirection(){return myPointDirection;} 
+  public void setX(int x) {
+    myCenterX = x;
+  }  
+  public int getX() {
+    return (int)myCenterX;
+  }
+  public void setY(int y) {
+    myCenterY = y;
+  }
+  public int getY() {
+    return (int)myCenterY;
+  } 
+  public void setDirectionX(double x) {
+    myDirectionX = x;
+  }
+  public double getDirectionX() {
+    return myDirectionX;
+  }
+  public void setDirectionY(double y) {
+    myDirectionY = y;
+  }
+  public double getDirectionY() {
+    return myDirectionY;
+  }
+  public void setPointDirection(int degrees) {
+    myPointDirection = degrees;
+  }  
+  public double getPointDirection() {
+    return myPointDirection;
+  } 
 
-  public void setSize(int x){asteroidSize = x;}  
-  public int getSize() {return asteroidSize;}
+  public void setSize(int x) {
+    asteroidSize = x;
+  }  
+  public int getSize() {
+    return asteroidSize;
+  }
 
-void move()
-{ 
-rotate(rotSpeed);
-   super.move();
-}
+  void move()
+  { 
+    rotate(rotSpeed);
+    super.move();
+  }
 }
 
 class SpaceShip extends Floater 
@@ -317,25 +356,44 @@ class SpaceShip extends Floater
     yCorners[2] = 8;
     xCorners[3] = -2;
     yCorners[3] = 0;
-    myColor = color((int)(Math.random()*256),(int)(Math.random()*256),(int)(Math.random()*256));   
+    myColor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256));   
     myCenterX = width/2;
-     myCenterY = height/2; //holds center coordinates   
-     myDirectionX = 0;
-     myDirectionY = 0; //holds x and y coordinates of the vector for direction of travel   
-    myPointDirection = 270; //holds current direction the ship is pointing in degrees    
+    myCenterY = height/2; //holds center coordinates   
+    myDirectionX = 0;
+    myDirectionY = 0; //holds x and y coordinates of the vector for direction of travel   
+    myPointDirection = 270; //holds current direction the ship is pointing in degrees
   }
-  public void setX(int x){myCenterX = x;}  
-  public int getX() {return (int)myCenterX;}
-  public void setY(int y){myCenterY = y;}
-  public int getY(){return (int)myCenterY;} 
-  public void setDirectionX(double x){myDirectionX = x;}
-  public double getDirectionX() {return myDirectionX;}
-  public void setDirectionY(double y){myDirectionY = y;}
-  public double getDirectionY() {return myDirectionY;}
-  public void setPointDirection(int degrees){myPointDirection = degrees;}  
-  public double getPointDirection(){return myPointDirection;} 
+  public void setX(int x) {
+    myCenterX = x;
+  }  
+  public int getX() {
+    return (int)myCenterX;
+  }
+  public void setY(int y) {
+    myCenterY = y;
+  }
+  public int getY() {
+    return (int)myCenterY;
+  } 
+  public void setDirectionX(double x) {
+    myDirectionX = x;
+  }
+  public double getDirectionX() {
+    return myDirectionX;
+  }
+  public void setDirectionY(double y) {
+    myDirectionY = y;
+  }
+  public double getDirectionY() {
+    return myDirectionY;
+  }
+  public void setPointDirection(int degrees) {
+    myPointDirection = degrees;
+  }  
+  public double getPointDirection() {
+    return myPointDirection;
+  } 
   // return null;
-
 }
 
 class Missle extends Floater
@@ -345,32 +403,52 @@ class Missle extends Floater
     myCenterX = gideon.getX();
     myCenterY = gideon.getY();
     myPointDirection = gideon.getPointDirection();
-     double dRadians = myPointDirection*(Math.PI/180);
-      myDirectionX = 5 * Math.cos(dRadians) + gideon.getDirectionX();
- myDirectionY = 5 * Math.sin(dRadians) + gideon.getDirectionY();
-  myColor = color((int)(Math.random()*256),(int)(Math.random()*256),(int)(Math.random()*256));   
+    double dRadians = myPointDirection*(Math.PI/180);
+    myDirectionX = 5 * Math.cos(dRadians) + gideon.getDirectionX();
+    myDirectionY = 5 * Math.sin(dRadians) + gideon.getDirectionY();
+    myColor = color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256));
   }
-   public void setX(int x){myCenterX = x;}  
-  public int getX() {return (int)myCenterX;}
-  public void setY(int y){myCenterY = y;}
-  public int getY(){return (int)myCenterY;} 
-  public void setDirectionX(double x){myDirectionX = x;}
-  public double getDirectionX() {return myDirectionX;}
-  public void setDirectionY(double y){myDirectionY = y;}
-  public double getDirectionY() {return myDirectionY;}
-  public void setPointDirection(int degrees){myPointDirection = degrees;}  
-  public double getPointDirection(){return myPointDirection;} 
+  public void setX(int x) {
+    myCenterX = x;
+  }  
+  public int getX() {
+    return (int)myCenterX;
+  }
+  public void setY(int y) {
+    myCenterY = y;
+  }
+  public int getY() {
+    return (int)myCenterY;
+  } 
+  public void setDirectionX(double x) {
+    myDirectionX = x;
+  }
+  public double getDirectionX() {
+    return myDirectionX;
+  }
+  public void setDirectionY(double y) {
+    myDirectionY = y;
+  }
+  public double getDirectionY() {
+    return myDirectionY;
+  }
+  public void setPointDirection(int degrees) {
+    myPointDirection = degrees;
+  }  
+  public double getPointDirection() {
+    return myPointDirection;
+  } 
 
   void show()
   {
     fill(myColor);
     stroke(myColor);
-    ellipse((int)(myCenterX),(int)(myCenterY),5,5);
+    ellipse((int)(myCenterX), (int)(myCenterY), 5, 5);
   }
   void move()
   {
     myCenterX += myDirectionX;    
-    myCenterY += myDirectionY;   
+    myCenterY += myDirectionY;
   }
 }
 
@@ -402,12 +480,12 @@ abstract class Floater //Do NOT modify the Floater class! Make changes in the Sp
     double dRadians =myPointDirection*(Math.PI/180);     
     //change coordinates of direction of travel    
     myDirectionX += ((dAmount) * Math.cos(dRadians));    
-    myDirectionY += ((dAmount) * Math.sin(dRadians));       
+    myDirectionY += ((dAmount) * Math.sin(dRadians));
   }   
   public void rotate (int nDegreesOfRotation)   
   {     
     //rotates the floater by a given number of degrees    
-    myPointDirection+=nDegreesOfRotation;   
+    myPointDirection+=nDegreesOfRotation;
   }   
   public void move ()   //move the floater in the current direction of travel
   {      
@@ -416,22 +494,20 @@ abstract class Floater //Do NOT modify the Floater class! Make changes in the Sp
     myCenterY += myDirectionY;     
 
     //wrap around screen    
-    if(myCenterX > width)
+    if (myCenterX > width)
     {     
-      myCenterX = 0;    
-    }    
-    else if (myCenterX < 0)
+      myCenterX = 0;
+    } else if (myCenterX < 0)
     {     
-      myCenterX = width;    
+      myCenterX = width;
     }    
-    if(myCenterY > height)
+    if (myCenterY > height)
     {    
-      myCenterY = 0;    
-    }   
-    else if (myCenterY < 0)
+      myCenterY = 0;
+    } else if (myCenterY < 0)
     {     
-      myCenterY = height;    
-    }   
+      myCenterY = height;
+    }
   }   
   public void show ()  //Draws the floater at the current position  
   {             
@@ -442,16 +518,15 @@ abstract class Floater //Do NOT modify the Floater class! Make changes in the Sp
     double dRadians = myPointDirection*(Math.PI/180);                 
     int xRotatedTranslated, yRotatedTranslated;    
     beginShape();         
-    for(int nI = 0; nI < corners; nI++)    
+    for (int nI = 0; nI < corners; nI++)    
     {     
       //rotate and translate the coordinates of the floater using current direction 
       xRotatedTranslated = (int)((xCorners[nI]* Math.cos(dRadians)) - (yCorners[nI] * Math.sin(dRadians))+myCenterX);     
       yRotatedTranslated = (int)((xCorners[nI]* Math.sin(dRadians)) + (yCorners[nI] * Math.cos(dRadians))+myCenterY);      
-      vertex(xRotatedTranslated,yRotatedTranslated);    
+      vertex(xRotatedTranslated, yRotatedTranslated);
     }   
-    endShape(CLOSE);  
-  }   
-  
+    endShape(CLOSE);
+  }
 }
 
 class Star    
@@ -476,16 +551,13 @@ class Star
     if (sparkleX == 1)
     {
       sparkleY = 5;
-    }
-    else if (sparkleX == 2)
+    } else if (sparkleX == 2)
     {
       sparkleY = 4;
-    }
-    else if (sparkleX == 4)
+    } else if (sparkleX == 4)
     {
       sparkleY = 2;
-    }
-    else 
+    } else 
     {
       sparkleY = 1;
     }
@@ -498,8 +570,7 @@ class Star
     if (get(myX, myY+sparkleY)!=color(205))
     {
       fill(randColor, randColor, randColor);
-    }
-    else
+    } else
     {
       fill(0);
     }
@@ -517,8 +588,7 @@ class Star
       {
         sparkleX = 4;
         sparkleY = 1;
-      }
-      else 
+      } else 
       {
         sparkleX = 1;
         sparkleY = 4;
