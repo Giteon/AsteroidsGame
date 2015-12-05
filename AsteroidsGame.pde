@@ -1,4 +1,4 @@
-int lives = 150;
+int lives = 650;
 int livesDist = 10;
 int distanceToMissle = 0;
 int distanceToShip = 0;
@@ -51,7 +51,7 @@ if(lives<=0)
   fill(255);
   for (int g = 0; g < 1; g++)
   {
-  text("GAME OVER",(int)(Math.random()*1200),(int)(Math.random()*1200));
+  text("GAME OVER",width/2-200,height/2);
 }
 }
 gideon.show();
