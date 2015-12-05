@@ -1,5 +1,5 @@
 int level = 1;
-int lives = 150;
+int lives = 650;
 int livesDist = 10;
 int distanceToMissle = 0;
 int distanceToShip = 0;
