@@ -8,6 +8,7 @@ SpaceShip gideon;
 Star [] manyStars;
 ArrayList <Missle> manyMissles;
 ArrayList <Asteroid> manyAsteroids;
+boolean gameOver = false;
 boolean upPressed = false;
 boolean downPressed = false;
 boolean leftPressed = false;
@@ -67,8 +68,11 @@ public void draw()
     {
       text("GAME OVER. You reached level " + level, width/2, height/2);
       text("Refresh page to try again",width/2,height/2+150);
+      gameOver = true;
     }
   }
+  if (gameOver==false)
+  {
   gideon.show();
   gideon.move();
 
@@ -81,6 +85,7 @@ public void draw()
   {
     manyMissles.get(k).show();
     manyMissles.get(k).move();
+  }
   }
   //checks if missle hits an asteroid
   for (int z = 0; z < manyAsteroids.size (); z++)
