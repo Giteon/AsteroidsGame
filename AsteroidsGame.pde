@@ -1,5 +1,5 @@
 int level = 1;
-int lives = 50;
+int lives = 150;
 int livesDist = 10;
 int distanceToMissle = 0;
 int distanceToShip = 0;
@@ -66,8 +66,7 @@ public void draw()
     for (int g = 0; g < 1; g++)
     {
       text("GAME OVER. You reached level " + level, width/2, height/2);
-       text("Refresh the page to try again, width/2, height/2+150);
-      level = 0;
+      text("Refresh page to try again",width/2,height/2+150);
     }
   }
   gideon.show();
