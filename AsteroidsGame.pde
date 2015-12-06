@@ -1,5 +1,5 @@
 int level = 1;
-int lives = 650;
+int lives = 50;
 int livesDist = 10;
 int distanceToMissle = 0;
 int distanceToShip = 0;
@@ -158,11 +158,11 @@ public void draw()
   }
   if (upPressed == true)
   {
-    gideon.accelerate(0.86);
+    gideon.accelerate(0.56);
   }
   if (downPressed == true)
   {
-    gideon.accelerate(-0.86);
+    gideon.accelerate(-0.56);
   }
 }
 public void keyPressed()
