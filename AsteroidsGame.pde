@@ -162,11 +162,11 @@ public void draw()
   }
   if (upPressed == true)
   {
-    gideon.accelerate(0.56);
+    gideon.accelerate(0.4);
   }
   if (downPressed == true)
   {
-    gideon.accelerate(-0.56);
+    gideon.accelerate(-0.4);
   }
 }
 public void keyPressed()
