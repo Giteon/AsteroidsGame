@@ -15,7 +15,7 @@ boolean leftPressed = false;
 boolean rightPressed = false;
 public void setup() 
 {
-  size(1200, 700);
+  size(1200, 500);
   background(0);
   gideon = new SpaceShip();
   manyStars = new Star[100];
@@ -212,7 +212,7 @@ public void keyReleased()
   {
 
     gideon.setX((int)(Math.random()*1200));
-    gideon.setY((int)(Math.random()*700));
+    gideon.setY((int)(Math.random()*500));
     // gideon.setDirectionX(2);
     // gideon.setDirectionY(2);
   }
@@ -647,17 +647,17 @@ class Star
     if (myX >= width)
     {
       myX = (int)(Math.random()*200);
-      myY = (int)(Math.random()*700);
+      myY = (int)(Math.random()*500);
     }
     if (myY <= 0)
     {
       myX = (int)(Math.random()*1200);
-      myY = (int)(Math.random()*200+500);
+      myY = (int)(Math.random()*200+300);
     }
     if (myX <= 0)
     {
       myX = (int)(Math.random()*200+1000);
-      myY = (int)(Math.random()*700);
+      myY = (int)(Math.random()*500);
     }
 
     // void wrap() which checks if the y coordinate is off the bottom of the screen. 
